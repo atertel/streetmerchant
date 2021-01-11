@@ -22,7 +22,7 @@ export function sendTweet(link: Link, store: Store) {
 		logger.debug('↗ sending twitter message');
 
 		let status = `${Print.inStock(link, store)}\n${
-			link.cartUrl ? link.cartUrl : link.url
+			link.url ? link.url : link.url
 		}`;
 
 		if (twitter.tweetTags) {

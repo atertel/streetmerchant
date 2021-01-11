@@ -28,11 +28,9 @@ export function sendDiscordMessage(link: Link, store: Store) {
 				const embed = new Discord.MessageEmbed()
 					.setTitle('_**Stock alert!**_')
 					.setDescription(
-						'> provided by [streetmerchant](https://github.com/jef/streetmerchant) with :heart:'
+					''
 					)
-					.setThumbnail(
-						'https://raw.githubusercontent.com/jef/streetmerchant/main/docs/assets/images/streetmerchant-logo.png'
-					)
+			
 					.setColor('#52b788')
 					.setTimestamp();
 
@@ -44,7 +42,6 @@ export function sendDiscordMessage(link: Link, store: Store) {
 						true
 					);
 				embed.addField('Product Page', link.url);
-				if (link.cartUrl) embed.addField('Add to Cart', link.cartUrl);
 				embed.addField('Brand', link.brand, true);
 				embed.addField('Model', link.model, true);
 				embed.addField('Series', link.series, true);
@@ -72,7 +69,7 @@ export function sendDiscordMessage(link: Link, store: Store) {
 						client,
 						message: client.send(notifyText.join(' '), {
 							embeds: [embed],
-							username: 'streetmerchant'
+							username: 'GameGearStock'
 						})
 					});
 				}
