@@ -197,6 +197,8 @@ export type Labels = {
 	outOfStock?: LabelQuery;
 	maxPrice?: Pricing;
 	name?: string;
+	scrollIntoView?: string;
+	scrollIntoViewEnd?: string;
 	url?: LabelQuery;
 };
 

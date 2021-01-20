@@ -6,7 +6,14 @@ import {
 	RespondOptions,
 	Response
 } from 'puppeteer';
-import {Labels, Link, ListLink, ProductLink, Store, getStores} from './model';
+import {
+	Attribute,
+	Link,
+	ListLink,
+	ProductLink,
+	Store,
+	getStores
+} from './model';
 import {Print, logger} from '../logger';
 import {
 	Selector,
@@ -14,7 +21,6 @@ import {
 	extractAttributeValue,
 	extractElementContents,
 	extractElementHandles,
-	extractPageContents,
 	getElementPrice,
 	getPrice,
 	pageIncludesLabels
@@ -309,6 +315,26 @@ async function lookupCards(
 		return statusCode;
 	}
 
+	if (store.listLabels?.scrollIntoView) {
+		await page.evaluate(
+			async (selector: string, endSelector: string | null) => {
+				document.querySelector(selector)?.scrollIntoView();
+				if (endSelector) {
+					return new Promise<void>((resolve) => {
+						const intervalID = setInterval(() => {
+							if (document.querySelector(endSelector)) {
+								clearInterval(intervalID);
+								resolve();
+							}
+						}, 500);
+					});
+				}
+			},
+			store.listLabels?.scrollIntoView,
+			store.listLabels.scrollIntoViewEnd ?? null
+		);
+	}
+
 	const cardsInStock = await lookupCardsInStock(store, page, link);
 
 	if (cardsInStock) {
@@ -581,8 +607,8 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
 
 		cardLink.url = (await extractAttributeValue(
 			cardElement,
-			'href',
-			'.sku-title a'
+			(store.listLabels?.url as Attribute).attributeName,
+			(store.listLabels?.url as Attribute).container
 		)) as string;
 
 		cardLink.url = new URL(cardLink.url, link.url).toString();
