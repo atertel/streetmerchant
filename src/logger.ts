@@ -1,4 +1,4 @@
-import {Link, Store} from './store/model';
+import {Link, ListLink, Store} from './store/model';
 import chalk from 'chalk';
 import {config} from './config';
 import winston from 'winston';

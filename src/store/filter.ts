@@ -1,4 +1,4 @@
-import {Link} from './model';
+import {Link, ListLink} from './model';
 import {config} from '../config';
 
 /**
@@ -11,7 +11,11 @@ function filterBrand(brand: Link['brand']): boolean {
 		return true;
 	}
 
-	return config.store.showOnlyBrands.includes(brand);
+	return (
+		brand === null ||
+		brand === undefined ||
+		config.store.showOnlyBrands.includes(brand)
+	);
 }
 
 /**
@@ -22,6 +26,15 @@ function filterBrand(brand: Link['brand']): boolean {
  */
 function filterModel(model: Link['model'], series: Link['series']): boolean {
 	if (config.store.showOnlyModels.length === 0) {
+		return true;
+	}
+
+	if (
+		model === null ||
+		model === undefined ||
+		series === null ||
+		series === undefined
+	) {
 		return true;
 	}
 
@@ -58,7 +71,11 @@ export function filterSeries(series: Link['series']): boolean {
 		return true;
 	}
 
-	return config.store.showOnlySeries.includes(series);
+	return (
+		series === null ||
+		series === undefined ||
+		config.store.showOnlySeries.includes(series)
+	);
 }
 
 /**

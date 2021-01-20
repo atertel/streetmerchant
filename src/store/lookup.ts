@@ -6,9 +6,19 @@ import {
 	RespondOptions,
 	Response
 } from 'puppeteer';
-import {Link, Store, getStores} from './model';
+import {Labels, Link, ListLink, ProductLink, Store, getStores} from './model';
 import {Print, logger} from '../logger';
-import {Selector, getPrice, pageIncludesLabels} from './includes-labels';
+import {
+	Selector,
+	elementIncludesLabels,
+	extractAttributeValue,
+	extractElementContents,
+	extractElementHandles,
+	extractPageContents,
+	getElementPrice,
+	getPrice,
+	pageIncludesLabels
+} from './includes-labels';
 import {
 	closePage,
 	delay,
@@ -160,8 +170,17 @@ async function lookup(browser: Browser, store: Store) {
 		}
 	}
 
+	const useListLinks =
+		config.store.preferListPages &&
+		store.listLinks &&
+		store.listLinks.length > 0;
+
+	const links: Link[] = useListLinks
+		? (store.listLinks as ListLink[])
+		: store.links;
+
 	/* eslint-disable no-await-in-loop */
-	for (const link of store.links) {
+	for (const link of links) {
 		if (!filterStoreLink(link)) {
 			continue;
 		}
@@ -237,7 +256,9 @@ async function lookup(browser: Browser, store: Store) {
 		let statusCode = 0;
 
 		try {
-			statusCode = await lookupCard(browser, store, page, link);
+			statusCode = await (useListLinks
+				? lookupCards(browser, store, page, link)
+				: lookupCard(browser, store, page, link));
 		} catch (error: unknown) {
 			logger.error(
 				`✖ [${store.name}] ${link.brand} ${link.series} ${
@@ -262,6 +283,55 @@ async function lookup(browser: Browser, store: Store) {
 		}
 	}
 	/* eslint-enable no-await-in-loop */
+}
+
+async function lookupCards(
+	browser: Browser,
+	store: Store,
+	page: Page,
+	link: ListLink
+): Promise<number> {
+	const givenWaitFor = store.waitUntil ? store.waitUntil : 'networkidle0';
+	const response: Response | null = await page.goto(link.url, {
+		waitUntil: givenWaitFor
+	});
+
+	const successStatusCodes = store.successStatusCodes ?? [[0, 399]];
+	const statusCode = await handleResponse(
+		browser,
+		store,
+		page,
+		link,
+		response
+	);
+
+	if (!isStatusCodeInRange(statusCode, successStatusCodes)) {
+		return statusCode;
+	}
+
+	const cardsInStock = await lookupCardsInStock(store, page, link);
+
+	if (cardsInStock) {
+		for (const card of cardsInStock) {
+			const givenUrl =
+				card.cartUrl && config.store.autoAddToCart
+					? card.cartUrl
+					: card.url;
+			logger.info(`${Print.inStock(card, store, true)}\n${givenUrl}`);
+
+			sendNotification(card, store);
+
+			if (config.page.inStockWaitTime) {
+				inStock[link.url] = true;
+
+				setTimeout(() => {
+					inStock[link.url] = false;
+				}, 1000 * config.page.inStockWaitTime);
+			}
+		}
+	}
+
+	return statusCode;
 }
 
 async function lookupCard(
@@ -389,6 +459,145 @@ async function checkIsCloudflare(store: Store, page: Page, link: Link) {
 	}
 
 	return false;
+}
+
+async function lookupCardsInStock(store: Store, page: Page, link: Link) {
+	const baseOptions: Selector = {
+		requireVisible: false,
+		selector: store.labels.container ?? 'body',
+		type: 'textContent'
+	};
+
+	if (store.labels.captcha) {
+		if (await pageIncludesLabels(page, store.labels.captcha, baseOptions)) {
+			logger.warn(Print.captcha(link, store, true));
+			await delay(getSleepTime(store));
+			return false;
+		}
+	}
+
+	if (store.labels.bannedSeller) {
+		if (
+			await pageIncludesLabels(
+				page,
+				store.labels.bannedSeller,
+				baseOptions
+			)
+		) {
+			logger.warn(Print.bannedSeller(link, store, true));
+			return false;
+		}
+	}
+
+	const cardsInStock: Link[] = [];
+
+	const cardElements = await extractElementHandles(
+		page,
+		store.listLabels?.container ?? 'body'
+	);
+
+	console.log(cardElements.length);
+
+	/* eslint-disable no-await-in-loop */
+	for (const cardElement of cardElements) {
+		const cardLink: ProductLink = {
+			brand: 'test:brand',
+			model: 'test:model',
+			series: 'test:series',
+			url: ''
+		};
+
+		if (store.listLabels?.outOfStock) {
+			if (
+				await elementIncludesLabels(
+					cardElement,
+					store.listLabels.outOfStock,
+					baseOptions
+				)
+			) {
+				logger.info(Print.outOfStock(link, store, true));
+				continue;
+			}
+		}
+
+		if (store.listLabels?.maxPrice) {
+			const maxPrice =
+				link.series && config.store.maxPrice.series[link.series];
+
+			cardLink.price = await getElementPrice(
+				cardElement,
+				store.listLabels.maxPrice,
+				baseOptions
+			);
+
+			if (
+				cardLink.price &&
+				maxPrice &&
+				cardLink.price > maxPrice &&
+				maxPrice > 0
+			) {
+				logger.info(Print.maxPrice(link, store, maxPrice, true));
+				continue;
+			}
+		}
+
+		if (store.listLabels?.inStock) {
+			const options = {
+				...baseOptions,
+				requireVisible: true,
+				type: 'outerHTML' as const
+			};
+
+			if (
+				!(await elementIncludesLabels(
+					cardElement,
+					store.listLabels.inStock,
+					options
+				))
+			) {
+				logger.info(Print.outOfStock(link, store, true));
+				continue;
+			}
+		}
+
+		if (link.labels?.inStock) {
+			const options = {
+				...baseOptions,
+				requireVisible: true,
+				type: 'outerHTML' as const
+			};
+
+			if (
+				!(await elementIncludesLabels(
+					cardElement,
+					link.labels.inStock,
+					options
+				))
+			) {
+				logger.info(Print.outOfStock(link, store, true));
+				continue;
+			}
+		}
+
+		cardLink.url = (await extractAttributeValue(
+			cardElement,
+			'href',
+			'.sku-title a'
+		)) as string;
+
+		cardLink.url = new URL(cardLink.url, link.url).toString();
+
+		cardLink.name = (await extractElementContents(cardElement, {
+			requireVisible: true,
+			selector: store.listLabels?.name ?? '*',
+			type: 'textContent'
+		})) as string;
+
+		cardsInStock.push(cardLink);
+	}
+	/* eslint-enable no-await-in-loop */
+
+	return cardsInStock.length > 0 ? cardsInStock : false;
 }
 
 async function lookupCardInStock(store: Store, page: Page, link: Link) {

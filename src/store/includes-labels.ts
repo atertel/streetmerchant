@@ -1,5 +1,5 @@
-import {Element, LabelQuery, Pricing} from './model';
-import {Page} from 'puppeteer';
+import {Element, LabelQuery, Labels, Pricing} from './model';
+import {ElementHandle, Page} from 'puppeteer';
 import {logger} from '../logger';
 
 export type Selector = {
@@ -37,7 +37,7 @@ function getQueryAsElementArray(
 	return [
 		{
 			container: query.container ?? defaultContainer,
-			text: query.text
+			text: (query as Element).text
 		}
 	];
 }
@@ -53,6 +53,32 @@ export async function pageIncludesLabels(
 		elementQueries.map(async (query) => {
 			const selector = {...options, selector: query.container};
 			const contents = (await extractPageContents(page, selector)) ?? '';
+
+			if (!contents) {
+				return false;
+			}
+
+			logger.debug(contents);
+
+			return includesLabels(contents, query.text);
+		})
+	);
+
+	return resolved.includes(true);
+}
+
+export async function elementIncludesLabels(
+	element: ElementHandle,
+	query: LabelQuery,
+	options: Selector
+) {
+	const elementQueries = getQueryAsElementArray(query, options.selector);
+
+	const resolved = await Promise.all(
+		elementQueries.map(async (query) => {
+			const selector = {...options, selector: query.container};
+			const contents =
+				(await extractElementContents(element, selector)) ?? '';
 
 			if (!contents) {
 				return false;
@@ -100,6 +126,43 @@ export async function extractPageContents(
 	}, selector);
 }
 
+export async function extractElementContents(
+	element: ElementHandle,
+	selector: Selector
+) {
+	return element.evaluate((parent, options: Selector) => {
+		const element: globalThis.HTMLElement | null = parent.querySelector(
+			options.selector
+		);
+
+		if (!element) {
+			return null;
+		}
+
+		if (
+			options.requireVisible &&
+			!(element.offsetWidth > 0 && element.offsetHeight > 0)
+		) {
+			return null;
+		}
+
+		switch (options.type) {
+			case 'innerHTML':
+				return element.innerHTML;
+			case 'outerHTML':
+				return element.outerHTML;
+			case 'textContent':
+				return element.textContent;
+			default:
+				return 'Error: selector.type is unknown';
+		}
+	}, selector);
+}
+
+export async function extractElementHandles(page: Page, selector: string) {
+	return page.$$(selector);
+}
+
 /**
  * Checks if DOM has any related text.
  *
@@ -116,6 +179,26 @@ export function includesLabels(
 	);
 }
 
+export async function extractAttributeValue(
+	element: ElementHandle,
+	attributeName: string,
+	selector?: string
+) {
+	return element.evaluate(
+		(element, attributeName, selector) => {
+			if (selector === null || selector === undefined) {
+				return element.getAttribute(attributeName);
+			}
+
+			return (element.querySelector(
+				selector
+			) as HTMLElement).getAttribute(attributeName);
+		},
+		attributeName,
+		selector ?? null
+	);
+}
+
 export async function getPrice(
 	page: Page,
 	query: Pricing,
@@ -123,6 +206,27 @@ export async function getPrice(
 ): Promise<number | null> {
 	const selector = {...options, selector: query.container};
 	const priceString = await extractPageContents(page, selector);
+
+	if (priceString) {
+		const priceSeparator = query.euroFormat ? /\./g : /,/g;
+		const price = Number.parseFloat(
+			priceString.replace(priceSeparator, '').match(/\d+/g)!.join('.')
+		);
+
+		logger.debug('received price', price);
+		return price;
+	}
+
+	return null;
+}
+
+export async function getElementPrice(
+	element: ElementHandle,
+	query: Pricing,
+	options: Selector
+) {
+	const selector = {...options, selector: query.container};
+	const priceString = await extractElementContents(element, selector);
 
 	if (priceString) {
 		const priceSeparator = query.euroFormat ? /\./g : /,/g;

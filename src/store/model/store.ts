@@ -10,6 +10,11 @@ export type Pricing = {
 	euroFormat?: boolean;
 };
 
+export type Attribute = {
+	container: string;
+	attributeName: string;
+};
+
 export type Brand =
 	| 'test:brand'
 	| 'amd'
@@ -152,7 +157,7 @@ export type Model =
 	| 'xlr8 revel'
 	| 'xlr8 uprising';
 
-export type Link = {
+export type ProductLink = {
 	brand: Brand;
 	cartUrl?: string;
 	itemNumber?: string;
@@ -163,9 +168,26 @@ export type Link = {
 	series: Series;
 	screenshot?: string;
 	url: string;
+	name?: string;
 };
 
-export type LabelQuery = Element[] | Element | string[];
+export type ListLink = {
+	brand?: Brand;
+	cartUrl?: string;
+	itemNumber?: string;
+	labels?: Labels;
+	model?: Model;
+	openCartAction?: (browser: Browser) => Promise<string>;
+	price?: number | null;
+	series: Series;
+	screenshot?: string;
+	url: string;
+	name?: string;
+};
+
+export type Link = ProductLink | ListLink;
+
+export type LabelQuery = Element[] | Element | Attribute | string[];
 
 export type Labels = {
 	bannedSeller?: LabelQuery;
@@ -174,6 +196,8 @@ export type Labels = {
 	inStock?: LabelQuery;
 	outOfStock?: LabelQuery;
 	maxPrice?: Pricing;
+	name?: string;
+	url?: LabelQuery;
 };
 
 export type StatusCodeRangeArray = Array<number | [number, number]>;
@@ -188,12 +212,14 @@ export type Store = {
 	backoffStatusCodes?: StatusCodeRangeArray;
 	disableAdBlocker?: boolean;
 	links: Link[];
+	listLinks?: ListLink[];
 	linksBuilder?: {
 		builder: (docElement: cheerio.Cheerio, series: Series) => Link[];
 		ttl?: number;
 		urls: Array<{series: Series; url: string | string[]}>;
 	};
 	labels: Labels;
+	listLabels?: Labels;
 	name: string;
 	currency: '£' | '$' | '€' | 'R$' | 'kr.' | '';
 	setupAction?: (browser: Browser) => void;
