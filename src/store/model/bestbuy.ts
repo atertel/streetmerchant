@@ -462,5 +462,27 @@ export const BestBuy: Store = {
 			url: 'https://api.bestbuy.com/click/-/6444449/pdp'
 		}
 	],
+	listLabels: {
+		container: '.sku-item',
+		inStock: {
+			container: '.fulfillment-add-to-cart-button',
+			text: ['add to cart']
+		},
+		maxPrice: {
+			container: '.priceView-customer-price'
+		},
+		name: '.sku-title',
+		url: {
+			attributeName: 'href',
+			container: '.sku-title a'
+		}
+	},
+	listLinks: [
+		{
+			series: '3080',
+			url:
+				'https://www.bestbuy.com/site/computer-cards-components/video-graphics-cards/abcat0507002.c?id=abcat0507002&qp=gpusv_facet%3DGraphics%20Processing%20Unit%20(GPU)~NVIDIA%20GeForce%20RTX%203080'
+		}
+	],
 	name: 'bestbuy'
 };
