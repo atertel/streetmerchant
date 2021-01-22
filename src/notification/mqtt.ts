@@ -56,8 +56,8 @@ function generateTopic(link: Link, store: Store, topic: string): string {
 	topic = topic.replace(/^\//, '');
 	topic = topic
 		.replace(/%series%/g, link.series)
-		.replace(/%brand%/g, link.brand)
-		.replace(/%model%/g, link.model)
+		.replace(/%brand%/g, link.brand as string)
+		.replace(/%model%/g, link.model as string)
 		.replace(/%store%/g, store.name);
 
 	return topic;
