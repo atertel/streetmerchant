@@ -522,8 +522,6 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
 		store.listLabels?.container ?? 'body'
 	);
 
-	console.log(cardElements.length);
-
 	/* eslint-disable no-await-in-loop */
 	for (const cardElement of cardElements) {
 		const cardLink: ProductLink = {
