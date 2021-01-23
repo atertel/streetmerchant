@@ -365,7 +365,7 @@ const store = {
 		}
 	},
 	microCenterLocation: envOrArray(process.env.MICROCENTER_LOCATION, ['web']),
-	preferListPages: envOrBoolean(process.env.PREFER_LIST_PAGES, false),
+	preferListPages: envOrArray(process.env.PREFER_LIST_PAGES),
 	showOnlyBrands: envOrArray(process.env.SHOW_ONLY_BRANDS),
 	showOnlyModels: envOrArray(process.env.SHOW_ONLY_MODELS).map((entry) => {
 		const [name, series] = entry.match(/[^:]+/g) ?? [];

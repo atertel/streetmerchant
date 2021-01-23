@@ -24,6 +24,7 @@
 | `MICROCENTER_LOCATION` | Specific MicroCenter location(s) to search. Comma separated, e.g.: `marietta,duluth`, default: `web` |
 | `NVIDIA_ADD_TO_CART_ATTEMPTS` | The maximum number of times the `nvidia-api` add to cart feature will be attempted before failing. Default: `10` |
 | `NVIDIA_SESSION_TTL` | The time in milliseconds to keep the cart active while using `nvidia-api`. Default: `60000` |
+| `PREFER_LIST_PAGES` | Filter for stores to check pages with lists of products if available rather than individual product pages. Comma separated, e.g.: `amazon,bestbuy`. |
 | `SHOW_ONLY_BRANDS` | Filter to show specified brands. Comma separated, e.g.: `evga,zotac` |
 | `SHOW_ONLY_MODELS` | Filter to show specified models. Comma separated, can include series. E.g.: `founders edition:3090,rog strix` |
 | `SHOW_ONLY_SERIES` | Filter to show specified series. Comma separated, e.g.: `3080,ryzen5900` |

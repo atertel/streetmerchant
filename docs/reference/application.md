@@ -15,7 +15,6 @@
 | `PAGE_SLEEP_MIN` | Minimum sleep time between queries of the same product page. In milliseconds, default: `5000` |
 | `PAGE_SLEEP_MAX` | Maximum sleep time between queries of the same product page. In milliseconds, default: `10000` |
 | `PAGE_TIMEOUT` | Navigation Timeout in milliseconds. `0` for infinite, default: `30000` |
-| `PREFER_LIST_PAGES` | Check pages with lists of products if available rather than individual product pages, default: `false` |
 | `PROXY_PROTOCOL` | Protocol of proxy server, such as `socks5`. Default: `http` |
 | `PROXY_ADDRESS` | IP Address or fqdn of proxy server |
 | `PROXY_PORT` | TCP Port number on which the proxy is listening for connections. Default: `80` |
