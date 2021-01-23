@@ -815,8 +815,20 @@ export const Amazon: Store = {
 	},
 	listLinks: [
 		{
+			series: '3060ti',
+			url: 'https://www.amazon.com/hz/wishlist/ls/1OTODU17LCHIY/'
+		},
+		{
+			series: '3070',
+			url: 'https://www.amazon.com/hz/wishlist/ls/1XTVSQHDX9EKI/'
+		},
+		{
 			series: '3080',
 			url: 'https://www.amazon.com/hz/wishlist/ls/248J8MZM3GH7/'
+		},
+		{
+			series: '3090',
+			url: 'https://www.amazon.com/hz/wishlist/ls/DGP5MK7I6FZ3/'
 		}
 	],
 	name: 'amazon'
