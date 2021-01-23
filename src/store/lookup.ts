@@ -316,23 +316,38 @@ async function lookupCards(
 	}
 
 	if (store.listLabels?.scrollIntoView) {
-		await page.evaluate(
-			async (selector: string, endSelector: string | null) => {
+		let containers = await page.$$(store.listLabels.container as string);
+		let containerCount = 0;
+
+		/* eslint-disable no-await-in-loop */
+		for (;;) {
+			await page.evaluate((selector: string) => {
 				document.querySelector(selector)?.scrollIntoView();
-				if (endSelector) {
-					return new Promise<void>((resolve) => {
-						const intervalID = setInterval(() => {
-							if (document.querySelector(endSelector)) {
-								clearInterval(intervalID);
-								resolve();
-							}
-						}, 500);
-					});
+			}, store.listLabels.scrollIntoView);
+
+			await new Promise<void>((resolve) => {
+				setTimeout(() => {
+					resolve();
+				}, 500);
+			});
+
+			if (store.listLabels.scrollIntoViewEnd) {
+				if (await page.$(store.listLabels.scrollIntoViewEnd)) {
+					break;
 				}
-			},
-			store.listLabels?.scrollIntoView,
-			store.listLabels.scrollIntoViewEnd ?? null
-		);
+			} else {
+				containers = await page.$$(
+					store.listLabels.container as string
+				);
+
+				if (containers.length === containerCount) {
+					break;
+				}
+
+				containerCount = containers.length;
+			}
+		}
+		/* eslint-enable no-await-in-loop */
 	}
 
 	const cardsInStock = await lookupCardsInStock(store, page, link);
