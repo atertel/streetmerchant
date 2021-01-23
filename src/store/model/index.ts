@@ -259,6 +259,12 @@ function printConfig() {
 		);
 	}
 
+	if (config.store.preferListPages.length > 0) {
+		logger.info(
+			`ℹ list pages:      ${config.store.preferListPages.join(', ')}`
+		);
+	}
+
 	if (config.store.showOnlyBrands.length > 0) {
 		logger.info(
 			`ℹ selected brands: ${config.store.showOnlyBrands.join(', ')}`
