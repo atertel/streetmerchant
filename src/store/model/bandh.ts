@@ -240,5 +240,42 @@ export const BAndH: Store = {
 				'https://www.bhphotovideo.com/c/product/1560680-REG/corsair_cp_9020186_na_corsair_sf750_power_supply.html'
 		}
 	],
+	listLabels: {
+		container: 'div[data-selenium="miniProductPage"]',
+		inStock: {
+			container: 'button[data-selenium="addToCartButton"]',
+			text: ['add to cart']
+		},
+		maxPrice: {
+			container: 'div[data-selenium="miniProductPagePricingCurrency"]'
+		},
+		name: 'span[data-selenium="miniProductPageProductName"]',
+		url: {
+			attributeName: 'href',
+			container: 'a[data-selenium="miniProductPageProductNameLink"]'
+		}
+	},
+	listLinks: [
+		{
+			series: '3060ti',
+			url:
+				'https://www.bhphotovideo.com/c/products/Graphic-Cards/ci/6567/N/3668461602?filters=fct_nvidia-geforce-series_5011%3Ageforce-rtx-3060-ti'
+		},
+		{
+			series: '3070',
+			url:
+				'https://www.bhphotovideo.com/c/products/Graphic-Cards/ci/6567/N/3668461602?filters=fct_nvidia-geforce-series_5011%3Ageforce-rtx-3070'
+		},
+		{
+			series: '3080',
+			url:
+				'https://www.bhphotovideo.com/c/products/Graphic-Cards/ci/6567/N/3668461602?filters=fct_nvidia-geforce-series_5011%3Ageforce-rtx-3080'
+		},
+		{
+			series: '3090',
+			url:
+				'https://www.bhphotovideo.com/c/products/Graphic-Cards/ci/6567/N/3668461602?filters=fct_nvidia-geforce-series_5011%3Ageforce-rtx-3090'
+		}
+	],
 	name: 'bandh'
 };
