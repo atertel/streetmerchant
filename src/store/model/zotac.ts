@@ -78,5 +78,42 @@ export const Zotac: Store = {
 				'https://store.zotac.com/zotac-gaming-geforce-rtx-3090-trinity-zt-a30900d-10p'
 		}
 	],
+	listLabels: {
+		container: '.item[itemtype="http://schema.org/product"]',
+		inStock: {
+			container: '.btn-cart',
+			text: ['add to cart']
+		},
+		maxPrice: {
+			container: '.price'
+		},
+		name: '.product-name',
+		url: {
+			attributeName: 'href',
+			container: '.product-name a'
+		}
+	},
+	listLinks: [
+		{
+			series: '3060ti',
+			url:
+				'https://www.zotacstore.com/us/graphics-cards/geforce-rtx-30-series/geforce-rtxtm-3060-ti'
+		},
+		{
+			series: '3070',
+			url:
+				'https://www.zotacstore.com/us/graphics-cards/geforce-rtx-30-series/geforce-rtxtm-3070'
+		},
+		{
+			series: '3080',
+			url:
+				'https://www.zotacstore.com/us/graphics-cards/geforce-rtx-30-series/geforce-rtxtm-3080-1'
+		},
+		{
+			series: '3090',
+			url:
+				'https://www.zotacstore.com/us/graphics-cards/geforce-rtx-30-series/geforce-rtxtm-3090'
+		}
+	],
 	name: 'zotac'
 };
