@@ -177,8 +177,7 @@ async function lookup(browser: Browser, store: Store) {
 	}
 
 	const useListLinks =
-		config.store.preferListPages &&
-		config.store.preferListPages.includes(store.name) &&
+		config.store.preferListPages?.includes(store.name) &&
 		store.listLinks &&
 		store.listLinks.length > 0;
 
