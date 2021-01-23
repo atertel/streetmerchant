@@ -163,6 +163,38 @@ export const Asus: Store = {
 			url: 'https://store.asus.com/us/item/202011AM200000003'
 		}
 	],
+	listLabels: {
+		container: '.item',
+		inStock: {
+			container: '.add_cart',
+			text: ['buy now']
+		},
+		maxPrice: {
+			container: '.price'
+		},
+		name: '.name',
+		url: {
+			attributeName: 'href',
+			container: '.photo'
+		}
+	},
+	listLinks: [
+		{
+			series: '3070',
+			url:
+				'https://store.asus.com/us/category/graphicscards/20201104PV000005-20201104PV000006?sort=sm_soldqty&page=1'
+		},
+		{
+			series: '3080',
+			url:
+				'https://store.asus.com/us/category/graphicscards/20201104PV000003-20201104PV000004?sort=sm_soldqty&page=1'
+		},
+		{
+			series: '3090',
+			url:
+				'https://store.asus.com/us/category/graphicscards/20201104PV000001-20201104PV000002?sort=sm_soldqty&page=1'
+		}
+	],
 	name: 'asus',
 	realTimeInventoryLookup: async (itemNumber: string) => {
 		const request_url =
