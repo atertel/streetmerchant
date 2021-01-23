@@ -525,9 +525,9 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
 	/* eslint-disable no-await-in-loop */
 	for (const cardElement of cardElements) {
 		const cardLink: ProductLink = {
-			brand: 'test:brand',
-			model: 'test:model',
-			series: 'test:series',
+			brand: link.brand ?? 'test:brand',
+			model: link.model ?? 'test:model',
+			series: link.series ?? 'test:series',
 			url: ''
 		};
 
