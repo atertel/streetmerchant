@@ -1063,6 +1063,43 @@ export const Newegg: Store = {
 				'https://www.newegg.com/asus-rog-crosshair-viii-dark-hero/p/N82E16813119362'
 		}
 	],
+	listLabels: {
+		container: '.item-cell',
+		inStock: {
+			container: '.item-button-area',
+			text: ['add to cart']
+		},
+		maxPrice: {
+			container: '.price-current'
+		},
+		name: '.item-title',
+		url: {
+			attributeName: 'href',
+			container: '.item-title'
+		}
+	},
+	listLinks: [
+		{
+			series: '3060ti',
+			url:
+				'https://www.newegg.com/p/pl?N=100007709%20601359415&PageSize=96'
+		},
+		{
+			series: '3070',
+			url:
+				'https://www.newegg.com/p/pl?N=100007709%20601357250&PageSize=96'
+		},
+		{
+			series: '3080',
+			url:
+				'https://www.newegg.com/p/pl?N=100007709%20601357247&PageSize=96'
+		},
+		{
+			series: '3090',
+			url:
+				'https://www.newegg.com/p/pl?N=100007709%20601357248&PageSize=96'
+		}
+	],
 	name: 'newegg',
 	realTimeInventoryLookup: async (itemNumber: string) => {
 		const request_url =
