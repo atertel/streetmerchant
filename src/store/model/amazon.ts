@@ -806,6 +806,7 @@ export const Amazon: Store = {
     maxPrice: {
       container: '.itemUsedAndNewPrice',
     },
+    name: '.a-link-normal[id][title]',
     scrollIntoView: '#navFooter',
     scrollIntoViewEnd: '#endOfListMarker',
     url: {
