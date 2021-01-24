@@ -1082,22 +1082,22 @@ export const Newegg: Store = {
 		{
 			series: '3060ti',
 			url:
-				'https://www.newegg.com/p/pl?N=100007709%20601359415&PageSize=96'
+				'https://www.newegg.com/p/pl?d=3060ti&N=8000%204020%204021&PageSize=96'
 		},
 		{
 			series: '3070',
 			url:
-				'https://www.newegg.com/p/pl?N=100007709%20601357250&PageSize=96'
+				'https://www.newegg.com/p/pl?d=3070&N=8000%204021%204022&PageSize=96'
 		},
 		{
 			series: '3080',
 			url:
-				'https://www.newegg.com/p/pl?N=100007709%20601357247&PageSize=96'
+				'https://www.newegg.com/p/pl?d=3080&N=8000%204022%204023&PageSize=96'
 		},
 		{
 			series: '3090',
 			url:
-				'https://www.newegg.com/p/pl?N=100007709%20601357248&PageSize=96'
+				'https://www.newegg.com/p/pl?d=3090&N=8000%204085%204086&PageSize=96'
 		}
 	],
 	name: 'newegg',

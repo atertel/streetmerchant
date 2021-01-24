@@ -247,7 +247,7 @@ export const BAndH: Store = {
 			text: ['add to cart']
 		},
 		maxPrice: {
-			container: 'div[data-selenium="miniProductPagePricingCurrency"]'
+			container: 'div[data-selenium="uppedDecimalPriceFirst"]'
 		},
 		name: 'span[data-selenium="miniProductPageProductName"]',
 		url: {
