@@ -1,0 +1,6 @@
+/.nyc_output
+/build
+/coverage
+/docs
+/package.json
+/package-lock.json

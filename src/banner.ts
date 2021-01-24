@@ -1,10 +1,10 @@
-import chalk from 'chalk';
-import {readFileSync} from 'fs';
+import chalk from 'chalk'
+import {readFileSync} from 'fs'
 
-const version = readFileSync('version.txt', 'utf8');
+const version = readFileSync('version.txt', 'utf8')
 
 export const banner = {
-	asciiVersion: `
+  asciiVersion: `
   ██████ ▄▄▄█████▓ ██▀███  ▓█████ ▓█████▄▄▄█████▓ ███▄ ▄███▓▓█████  ██▀███   ▄████▄   ██░ ██  ▄▄▄       ███▄    █ ▄▄▄█████▓
 ▒██    ▒ ▓  ██▒ ▓▒▓██ ▒ ██▒▓█   ▀ ▓█   ▀▓  ██▒ ▓▒▓██▒▀█▀ ██▒▓█   ▀ ▓██ ▒ ██▒▒██▀ ▀█  ▓██░ ██▒▒████▄     ██ ▀█   █ ▓  ██▒ ▓▒
 ░ ▓██▄   ▒ ▓██░ ▒░▓██ ░▄█ ▒▒███   ▒███  ▒ ▓██░ ▒░▓██    ▓██░▒███   ▓██ ░▄█ ▒▒▓█    ▄ ▒██▀▀██░▒██  ▀█▄  ▓██  ▀█ ██▒▒ ▓██░ ▒░
@@ -15,11 +15,11 @@ export const banner = {
 ░  ░  ░    ░        ░░   ░    ░      ░    ░      ░      ░      ░     ░░   ░ ░         ░  ░░ ░  ░   ▒      ░   ░ ░   ░
 	  ░              ░        ░  ░   ░  ░               ░      ░  ░   ░     ░ ░       ░  ░  ░      ░  ░         ░
 ${version}`,
-	render(ascii: boolean, hexColor: string) {
-		return chalk
-			.hex(hexColor)
-			.bold(ascii ? this.asciiVersion : this.stringVersion);
-	},
-	stringVersion: `ＳＴＲＥＥＴＭＥＲＣＨＡＮＴ
-${version}`
-};
+  render(ascii: boolean, hexColor: string): string {
+    return chalk
+      .hex(hexColor)
+      .bold(ascii ? this.asciiVersion : this.stringVersion)
+  },
+  stringVersion: `ＳＴＲＥＥＴＭＥＲＣＨＡＮＴ
+${version}`,
+}

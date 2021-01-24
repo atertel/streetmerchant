@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "plugin:import/typescript",
+    "plugin:node/recommended-module",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "prettier/@typescript-eslint"
+  ],
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
+  "settings": {
+    "node": {
+      "convertPath": [
+        {
+          "include": ["src/**/*.ts", "src/**/*.tsx"],
+          "replace": ["^src/(.+)\\.tsx?$", "lib/$1.js"]
+        }
+      ],
+      "tryExtensions": [".ts", ".tsx", ".js", ".json", ".node"]
+    }
+  }
+}

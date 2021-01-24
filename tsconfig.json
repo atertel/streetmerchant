@@ -1,18 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es2019",
-    "module": "commonjs",
-    "lib": ["dom", "es2019", "es2020.bigint", "es2020.string", "es2020.symbol.wellknown"],
-    "allowJs": true,
-    "outDir": "build",
-    "rootDir": "src",
-    "strict": true,
-    "noImplicitAny": true,
+    "declaration": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "sourceMap": true
+    "module": "CommonJS",
+    "outDir": "build",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2018"
   },
-  "include": ["src/**/*"]
+  "include": ["src"]
 }

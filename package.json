@@ -1,13 +1,21 @@
 {
   "name": "streetmerchant",
   "description": "🔮 For all your Nvidia needs",
-  "main": "src/index.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "engines": {
+    "node": "^10.17 || ^12 || >=14"
+  },
   "scripts": {
     "all": "npm run build && npm run lint",
-    "build": "tsc",
-    "lint": "xo",
-    "lint:fix": "xo --fix",
-    "start": "npm run build && node build/index.js",
+    "build": "run-s clean compile",
+    "clean": "rimraf build",
+    "compile": "tsc",
+    "eslint": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "lint": "run-s eslint prettier",
+    "prettier": "prettier --loglevel warn --write **/*.{babelrc,css,html,js,json,jsx,md,scss,ts,tsx,yml}",
+    "run": "node build/index.js",
+    "start": "run-s build run",
     "start:dev": "nodemon --config nodemon.json",
     "start:production": "node build/index.js",
     "test:notification": "npm run build && node build/__test__/notification-test.js",
@@ -28,12 +36,11 @@
     "@doridian/puppeteer-page-proxy": "^1.2.11",
     "@jef/pushbullet": "^2.4.3",
     "@slack/web-api": "^5.15.0",
-    "@types/random-useragent": "^0.3.0",
-    "@types/redis": "^2.8.28",
     "chalk": "^4.1.0",
     "cheerio": "^1.0.0-rc.5",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "got": "^11.8.1",
     "messaging-api-telegram": "^1.0.4",
     "mqtt": "^4.2.6",
     "node-fetch": "^2.6.1",
@@ -59,28 +66,35 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@types/async": "^3.2.5",
     "@types/cheerio": "^0.22.23",
+    "@types/express": "^4.17.11",
     "@types/node": "^14.14.20",
     "@types/node-fetch": "^2.5.7",
     "@types/node-notifier": "^8.0.0",
     "@types/nodemailer": "^6.4.0",
     "@types/puppeteer": "^5.4.2",
+    "@types/qs": "^6.9.4",
+    "@types/random-useragent": "^0.3.0",
+    "@types/redis": "^2.8.28",
     "@types/twitter": "^1.7.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.0",
+    "@typescript-eslint/parser": "^4.14.0",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
     "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3",
-    "webpack": "^5.13.0",
-    "xo": "^0.36.1"
-  },
-  "xo": {
-    "prettier": true,
-    "ignores": "docs/javascripts",
-    "rules": {
-      "no-warning-comments": "off",
-      "sort-imports": "error",
-      "sort-keys": "error",
-      "sort-vars": "error"
-    }
+    "webpack": "^5.13.0"
   }
 }
