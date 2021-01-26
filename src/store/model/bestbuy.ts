@@ -465,7 +465,7 @@ export const BestBuy: Store = {
     container: '.sku-item',
     inStock: {
       container: '.fulfillment-add-to-cart-button',
-      text: ['add to cart'],
+      text: ['add to cart', 'see details'],
     },
     maxPrice: {
       container: '.priceView-customer-price',
