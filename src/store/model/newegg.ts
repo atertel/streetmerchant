@@ -1069,15 +1069,25 @@ export const Newegg: Store = {
     },
   ],
   listLabels: {
-    container: '.item-cell',
+    container: '.item-cell .item-container',
     inStock: {
       container: '.item-button-area',
-      text: ['add to cart'],
+      text: ['add to cart', 'view details'],
     },
     maxPrice: {
       container: '.price-current',
     },
     name: '.item-title',
+    outOfStock: [
+      {
+        container: '.item-button-area',
+        text: ['auto notify'],
+      },
+      {
+        container: '.item-promo',
+        text: ['out of stock'],
+      },
+    ],
     url: {
       attributeName: 'href',
       container: '.item-title',
