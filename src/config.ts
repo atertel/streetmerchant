@@ -342,6 +342,7 @@ if (process.env.MAX_PRICE) {
 const store = {
   autoAddToCart: envOrBoolean(process.env.AUTO_ADD_TO_CART, true),
   country: envOrString(process.env.COUNTRY, 'usa'),
+  disableScripts: envOrArray(process.env.DISABLE_SCRIPTS),
   maxPrice: {
     series: {
       '3060ti': envOrNumber(process.env.MAX_PRICE_SERIES_3060TI),

@@ -277,6 +277,10 @@ async function lookup(browser: Browser, store: Store) {
       }
     })
 
+    if (config.store.disableScripts.includes(store.name)) {
+      await page.setJavaScriptEnabled(false)
+    }
+
     let statusCode = 0
 
     try {

@@ -2,6 +2,7 @@
 
 | Environment variable | Description |
 |:---:|---|
+| `DISABLE_SCRIPTS` | Filter for stores to disable scripts for faster loading. This may break functionality or cause rate limiting with some stores. Comma separated, e.g.: `amazon,bestbuy`. |
 | `COUNTRY` | [Supported country](#supported-countries) you want to be scraped | Only used with `nvidia-api`, default: `usa` |
 | `MAX_PRICE_SERIES_3060TI` | Maximum price allowed for a match, applies 3060 Ti series cards (does not apply to these sites: Nvidia, Asus, EVGA) |
 | `MAX_PRICE_SERIES_3070` | Maximum price allowed for a match, applies 3070 series cards (does not apply to these sites: Nvidia, Asus, EVGA) |

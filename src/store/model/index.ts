@@ -263,6 +263,10 @@ function printConfig() {
     logger.info(`ℹ list pages:      ${config.store.preferListPages.join(', ')}`)
   }
 
+  if (config.store.disableScripts.length > 0) {
+    logger.info(`ℹ disable scripts: ${config.store.disableScripts.join(', ')}`)
+  }
+
   if (config.store.showOnlyBrands.length > 0) {
     logger.info(`ℹ selected brands: ${config.store.showOnlyBrands.join(', ')}`)
   }
