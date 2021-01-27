@@ -23,6 +23,7 @@
 | `MAX_PRICE_SERIES_XBOXSX` | Maximum price allowed for a match, applies PS5 digital edition |
 | `MAX_PRICE_SERIES_TEST` | Maximum price allowed for a match, applies `test:series` |
 | `MICROCENTER_LOCATION` | Specific MicroCenter location(s) to search. Comma separated, e.g.: `marietta,duluth`, default: `web` |
+| `NOTIFY_ONCE_PER_RESTOCK` | Only send one notification when an item is in stock. Do not notifiy again until the item is restocked, default: `false` |
 | `NVIDIA_ADD_TO_CART_ATTEMPTS` | The maximum number of times the `nvidia-api` add to cart feature will be attempted before failing. Default: `10` |
 | `NVIDIA_SESSION_TTL` | The time in milliseconds to keep the cart active while using `nvidia-api`. Default: `60000` |
 | `PREFER_LIST_PAGES` | Filter for stores to check pages with lists of products if available rather than individual product pages. Comma separated, e.g.: `amazon,bestbuy`. |

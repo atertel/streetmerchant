@@ -366,6 +366,10 @@ const store = {
     },
   },
   microCenterLocation: envOrArray(process.env.MICROCENTER_LOCATION, ['web']),
+  notifyOncePerRestock: envOrBoolean(
+    process.env.NOTIFY_ONCE_PER_RESTOCK,
+    false,
+  ),
   preferListPages: envOrArray(process.env.PREFER_LIST_PAGES),
   showOnlyBrands: envOrArray(process.env.SHOW_ONLY_BRANDS),
   showOnlyModels: envOrArray(process.env.SHOW_ONLY_MODELS).map(entry => {

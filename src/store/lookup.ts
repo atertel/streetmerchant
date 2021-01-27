@@ -45,7 +45,7 @@ import {sendNotification} from '../notification'
 import useProxy from '@doridian/puppeteer-page-proxy'
 
 const inStock: Record<string, boolean> = {}
-
+const linkHasBeenNotified: Record<string, boolean> = {}
 const linkBuilderLastRunTimes: Record<string, number> = {}
 
 function nextProxy(store: Store) {
@@ -370,9 +370,17 @@ async function lookupCards(
     for (const card of cardsInStock) {
       const givenUrl =
         card.cartUrl && config.store.autoAddToCart ? card.cartUrl : card.url
-      logger.info(`${Print.inStock(card, store, true)}\n${givenUrl}`)
 
-      sendNotification(card, store)
+      if (
+        !config.store.notifyOncePerRestock ||
+        !linkHasBeenNotified[card.url]
+      ) {
+        logger.info(`${Print.inStock(card, store, true)}\n${givenUrl}`)
+        sendNotification(card, store)
+        linkHasBeenNotified[card.url] = true
+      } else {
+        logger.info(Print.inStockWaiting(link, store, true))
+      }
 
       if (config.page.inStockWaitTime) {
         inStock[link.url] = true
@@ -408,7 +416,6 @@ async function lookupCard(
   if (await lookupCardInStock(store, page, link)) {
     const givenUrl =
       link.cartUrl && config.store.autoAddToCart ? link.cartUrl : link.url
-    logger.info(`${Print.inStock(link, store, true)}\n${givenUrl}`)
 
     if (config.browser.open) {
       await (link.openCartAction === undefined
@@ -416,7 +423,13 @@ async function lookupCard(
         : link.openCartAction(browser))
     }
 
-    sendNotification(link, store)
+    if (!config.store.notifyOncePerRestock || !linkHasBeenNotified[link.url]) {
+      logger.info(`${Print.inStock(link, store, true)}\n${givenUrl}`)
+      sendNotification(link, store)
+      linkHasBeenNotified[link.url] = true
+    } else {
+      logger.info(Print.inStockWaiting(link, store, true))
+    }
 
     if (config.page.inStockWaitTime) {
       inStock[link.url] = true
@@ -432,6 +445,8 @@ async function lookupCard(
       link.screenshot = `success-${Date.now()}.png`
       await page.screenshot({path: link.screenshot})
     }
+  } else {
+    linkHasBeenNotified[link.url] = false
   }
 
   return statusCode
@@ -544,6 +559,14 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
       url: '',
     }
 
+    cardLink.url = (await extractAttributeValue(
+      cardElement,
+      (store.listLabels?.url as Attribute).attributeName,
+      (store.listLabels?.url as Attribute).container,
+    )) as string
+
+    cardLink.url = new URL(cardLink.url, link.url).toString()
+
     if (store.listLabels?.outOfStock) {
       if (
         await elementIncludesLabels(
@@ -553,6 +576,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
         )
       ) {
         logger.info(Print.outOfStock(link, store, true))
+        linkHasBeenNotified[cardLink.url] = false
         continue
       }
     }
@@ -573,6 +597,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
         maxPrice > 0
       ) {
         logger.info(Print.maxPrice(link, store, maxPrice, true))
+        linkHasBeenNotified[cardLink.url] = false
         continue
       }
     }
@@ -592,6 +617,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
         ))
       ) {
         logger.info(Print.outOfStock(link, store, true))
+        linkHasBeenNotified[cardLink.url] = false
         continue
       }
     }
@@ -611,17 +637,10 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
         ))
       ) {
         logger.info(Print.outOfStock(link, store, true))
+        linkHasBeenNotified[cardLink.url] = false
         continue
       }
     }
-
-    cardLink.url = (await extractAttributeValue(
-      cardElement,
-      (store.listLabels?.url as Attribute).attributeName,
-      (store.listLabels?.url as Attribute).container,
-    )) as string
-
-    cardLink.url = new URL(cardLink.url, link.url).toString()
 
     cardLink.name = (await extractElementContents(cardElement, {
       requireVisible: true,
