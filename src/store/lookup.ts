@@ -575,14 +575,15 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
           baseOptions,
         )
       ) {
-        logger.info(Print.outOfStock(link, store, true))
+        logger.info(Print.outOfStock(cardLink, store, true))
         linkHasBeenNotified[cardLink.url] = false
         continue
       }
     }
 
     if (store.listLabels?.maxPrice) {
-      const maxPrice = link.series && config.store.maxPrice.series[link.series]
+      const maxPrice =
+        cardLink.series && config.store.maxPrice.series[cardLink.series]
 
       cardLink.price = await getElementPrice(
         cardElement,
@@ -596,7 +597,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
         cardLink.price > maxPrice &&
         maxPrice > 0
       ) {
-        logger.info(Print.maxPrice(link, store, maxPrice, true))
+        logger.info(Print.maxPrice(cardLink, store, maxPrice, true))
         linkHasBeenNotified[cardLink.url] = false
         continue
       }
@@ -616,7 +617,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
           options,
         ))
       ) {
-        logger.info(Print.outOfStock(link, store, true))
+        logger.info(Print.outOfStock(cardLink, store, true))
         linkHasBeenNotified[cardLink.url] = false
         continue
       }
@@ -636,7 +637,7 @@ async function lookupCardsInStock(store: Store, page: Page, link: Link) {
           options,
         ))
       ) {
-        logger.info(Print.outOfStock(link, store, true))
+        logger.info(Print.outOfStock(cardLink, store, true))
         linkHasBeenNotified[cardLink.url] = false
         continue
       }
