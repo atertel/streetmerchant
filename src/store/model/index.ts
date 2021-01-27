@@ -97,6 +97,7 @@ import {Spielegrotte} from './spielegrotte'
 import {Brand, Model, Series, Store} from './store'
 import {Target} from './target'
 import {TescoIE} from './tesco-ie'
+import {Testing} from './testing'
 import {TopAchat} from './topachat'
 import {ToysRUs} from './toysrus'
 import {Umart} from './umart'
@@ -208,6 +209,7 @@ export const storeList = new Map([
   [SmythsToys.name, SmythsToys],
   [Spielegrotte.name, Spielegrotte],
   [Target.name, Target],
+  [Testing.name, Testing],
   [TescoIE.name, TescoIE],
   [TopAchat.name, TopAchat],
   [ToysRUs.name, ToysRUs],
