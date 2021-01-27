@@ -372,22 +372,18 @@ async function lookupCards(
         card.cartUrl && config.store.autoAddToCart ? card.cartUrl : card.url
 
       if (
-        !config.store.notifyOncePerRestock ||
-        !linkHasBeenNotified[card.url]
+        (!config.page.inStockWaitTime || !inStock[card.url]) &&
+        (!config.store.notifyOncePerRestock || !linkHasBeenNotified[card.url])
       ) {
         logger.info(`${Print.inStock(card, store, true)}\n${givenUrl}`)
         sendNotification(card, store)
         linkHasBeenNotified[card.url] = true
-      } else {
-        logger.info(Print.inStockWaiting(link, store, true))
-      }
-
-      if (config.page.inStockWaitTime) {
-        inStock[link.url] = true
-
+        inStock[card.url] = true
         setTimeout(() => {
-          inStock[link.url] = false
+          inStock[card.url] = false
         }, 1000 * config.page.inStockWaitTime)
+      } else {
+        logger.info(Print.inStockWaiting(card, store, true))
       }
     }
   }
