@@ -4,6 +4,10 @@ export const BAndH: Store = {
   backoffStatusCodes: [403, 429],
   currency: '$',
   labels: {
+    captcha: {
+      container: '.page-title',
+      text: ['please verify you are a human'],
+    },
     inStock: {
       container: 'div[data-selenium="addToCartSection"]',
       text: ['add to cart'],
@@ -240,6 +244,10 @@ export const BAndH: Store = {
     },
   ],
   listLabels: {
+    captcha: {
+      container: '.page-title',
+      text: ['please verify you are a human'],
+    },
     container: 'div[data-selenium="miniProductPage"]',
     inStock: {
       container: 'button[data-selenium="addToCartButton"]',
